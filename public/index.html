@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reaction Game</title>
+    <style>
+        body {
+            font-family: Arial;
+            text-align: center;
+            background: #f0f0f0;
+        }
+        h1 { color: #333; }
+        button {
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #target {
+            background: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>⚡ เกมคลิกให้ทัน</h1>
+
+    <input id="name" placeholder="ใส่ชื่อของคุณ" />
+
+    <br><br>
+
+    <button id="start">เริ่มเกม</button>
+
+    <h2 id="result">เวลาของคุณ: -</h2>
+
+    <button id="target" style="display:none;">กด!</button>
+
+    <h2>🏆 Leaderboard</h2>
+    <ul id="leaderboard"></ul>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
