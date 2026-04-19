@@ -1,3 +1,24 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <title>Reaction Game</title>
+</head>
+<body style="text-align:center; font-family:sans-serif;">
+
+<h1>⚡ เกมคลิกให้ทัน</h1>
+
+<input id="name" placeholder="ใส่ชื่อเล่น" />
+<br><br>
+
+<button onclick="startGame()">เริ่มเกม</button>
+
+<h2 id="status"></h2>
+<h3>คะแนน: <span id="score">0</span></h3>
+
+<h2>🏆 Leaderboard</h2>
+<ul id="leaderboard"></ul>
+
 <script>
 let score = 0;
 let playing = false;
@@ -7,7 +28,6 @@ function startGame() {
   playing = true;
   document.getElementById("score").innerText = score;
   document.getElementById("status").innerText = "กดเร็ว ๆ!";
-  
   setTimeout(endGame, 5000);
 }
 
@@ -29,24 +49,20 @@ function endGame() {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({ name, score })
   })
-  .then(() => loadLeaderboard());
+  .then(res => res.json())
+  .then(showLeaderboard);
 }
 
-// ⭐ โหลดอันดับ
-function loadLeaderboard() {
-  fetch("/leaderboard")
-    .then(res => res.json())
-    .then(data => {
-      const list = document.getElementById("leaderboard");
-      list.innerHTML = "";
-      data.forEach(p => {
-        const li = document.createElement("li");
-        li.innerText = p.name + " - " + p.score;
-        list.appendChild(li);
-      });
-    });
+function showLeaderboard(data) {
+  const list = document.getElementById("leaderboard");
+  list.innerHTML = "";
+  data.forEach(p => {
+    const li = document.createElement("li");
+    li.innerText = p.name + " - " + p.score;
+    list.appendChild(li);
+  });
 }
-
-// ⭐ โหลดอันดับตอนเข้าเว็บ
-window.onload = loadLeaderboard;
 </script>
+
+</body>
+</html>
