@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="th">
+<html>
 <head>
-  <meta charset="UTF-8">
   <title>Reaction Game</title>
 </head>
 <body style="text-align:center; font-family:sans-serif;">
 
-<h1>⚡ เกมคลิกให้ทัน</h1>
+<h1>เกมคลิกให้ทัน</h1>
 
-<input id="name" placeholder="ใส่ชื่อเล่น" />
+<input id="name" placeholder="ใส่ชื่อ">
 <br><br>
 
-<button onclick="startGame()">เริ่มเกม</button>
+<button onclick="startGame()">เริ่ม</button>
 
 <h2 id="status"></h2>
 <h3>คะแนน: <span id="score">0</span></h3>
 
-<h2>🏆 Leaderboard</h2>
+<h2>อันดับ</h2>
 <ul id="leaderboard"></ul>
 
 <script>
@@ -27,22 +26,22 @@ function startGame() {
   score = 0;
   playing = true;
   document.getElementById("score").innerText = score;
-  document.getElementById("status").innerText = "กดเร็ว ๆ!";
+  document.getElementById("status").innerText = "กดเร็ว!";
   setTimeout(endGame, 5000);
 }
 
-document.body.addEventListener("click", () => {
+document.body.onclick = function() {
   if (playing) {
     score++;
     document.getElementById("score").innerText = score;
   }
-});
+};
 
 function endGame() {
   playing = false;
-  document.getElementById("status").innerText = "จบเกม!";
+  document.getElementById("status").innerText = "จบ!";
 
-  const name = document.getElementById("name").value || "ไม่ระบุชื่อ";
+  const name = document.getElementById("name").value || "ผู้เล่น";
 
   fetch("/score", {
     method: "POST",
@@ -53,7 +52,6 @@ function endGame() {
   .then(data => {
     const list = document.getElementById("leaderboard");
     list.innerHTML = "";
-
     data.forEach(p => {
       const li = document.createElement("li");
       li.innerText = p.name + " - " + p.score;
