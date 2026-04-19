@@ -1,44 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="th">
 <head>
-    <title>Reaction Game</title>
-    <style>
-        body {
-            font-family: Arial;
-            text-align: center;
-            background: #f0f0f0;
-        }
-        h1 { color: #333; }
-        button {
-            padding: 15px 30px;
-            font-size: 18px;
-            margin: 10px;
-            cursor: pointer;
-        }
-        #target {
-            background: red;
-            color: white;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Reaction Game</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #111; color: #fff; }
+    button { padding: 10px 20px; font-size: 18px; margin: 10px; }
+    input { padding: 8px; font-size: 16px; }
+  </style>
 </head>
 <body>
 
-    <h1>⚡ เกมคลิกให้ทัน</h1>
+<h1>⚡ เกมคลิกให้ทัน</h1>
 
-    <input id="name" placeholder="ใส่ชื่อของคุณ" />
+<input id="name" placeholder="ใส่ชื่อเล่น" />
+<br><br>
 
-    <br><br>
+<button onclick="startGame()">เริ่มเกม</button>
 
-    <button id="start">เริ่มเกม</button>
+<h2 id="status"></h2>
+<h3>คะแนน: <span id="score">0</span></h3>
 
-    <h2 id="result">เวลาของคุณ: -</h2>
+<h2>🏆 Leaderboard</h2>
+<ul id="leaderboard"></ul>
 
-    <button id="target" style="display:none;">กด!</button>
+<script>
+let score = 0;
+let playing = false;
 
-    <h2>🏆 Leaderboard</h2>
-    <ul id="leaderboard"></ul>
+function startGame() {
+  score = 0;
+  playing = true;
+  document.getElementById("score").innerText = score;
+  document.getElementById("status").innerText = "กดเร็ว ๆ!";
+  
+  setTimeout(endGame, 5000);
+}
 
-    <script src="script.js"></script>
+document.body.addEventListener("click", () => {
+  if (playing) {
+    score++;
+    document.getElementById("score").innerText = score;
+  }
+});
+
+function endGame() {
+  playing = false;
+  document.getElementById("status").innerText = "จบเกม!";
+
+  const name = document.getElementById("name").value || "ไม่ระบุชื่อ";
+
+  fetch("/score", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ name, score })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById("leaderboard");
+    list.innerHTML = "";
+    data.forEach(p => {
+      const li = document.createElement("li");
+      li.innerText = p.name + " - " + p.score;
+      list.appendChild(li);
+    });
+  });
+}
+</script>
 
 </body>
 </html>
