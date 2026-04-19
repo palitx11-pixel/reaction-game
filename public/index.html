@@ -50,16 +50,15 @@ function endGame() {
     body: JSON.stringify({ name, score })
   })
   .then(res => res.json())
-  .then(showLeaderboard);
-}
+  .then(data => {
+    const list = document.getElementById("leaderboard");
+    list.innerHTML = "";
 
-function showLeaderboard(data) {
-  const list = document.getElementById("leaderboard");
-  list.innerHTML = "";
-  data.forEach(p => {
-    const li = document.createElement("li");
-    li.innerText = p.name + " - " + p.score;
-    list.appendChild(li);
+    data.forEach(p => {
+      const li = document.createElement("li");
+      li.innerText = p.name + " - " + p.score;
+      list.appendChild(li);
+    });
   });
 }
 </script>
